@@ -1,128 +1,55 @@
 {
   "name": "rxdux-state-manager",
-  "version": "0.0.1",
-  "description": "A simple state manager for React using RxJS",
+  "version": "0.0.0",
+  "description": "Use immer with React hooks",
+  "main": "dist/rxdux-state-manager.js",
+  "umd:main": "dist/rxdux-state-manager.umd.js",
+  "module": "dist/rxdux-state-manager.module.js",
+  "jsnext:main": "dist/rxdux-state-manager.module.js",
+  "react-native": "dist/rxdux-state-manager.module.js",
+  "typings": "dist/index.d.ts",
   "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.module.js",
-  "esmodule": "dist/index.modern.js",
-  "umd:main": "dist/index.umd.js",
   "exports": {
     ".": {
-      "node": {
-        "types": "./dist/index.d.ts",
-        "module": "./dist/index.module.js",
-        "require": "./dist/index.js",
-        "import": "./dist/index.mjs"
-      },
-      "browser": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.module.js",
-        "require": "./dist/index.js"
-      },
-      "default": "./dist/index.module.js"
-    },
-    "./package.json": "./package.json"
+      "require": "./dist/rxdux-state-manager.js",
+      "import": "./dist/rxdux-state-manager.module.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "sideEffects": false,
   "scripts": {
-    "size": "yarn build-only && size-limit",
-    "test": "yarn jest && eslint \"src/**.ts\"",
-    "build-only": "rm -rf ./dist/*; microbundle build --entry src/index.ts --name rxdux-state-manager --tsconfig tsconfig.json; cp ./dist/index.modern.js ./dist/index.mjs",
-    "build": "yarn test && yarn size && yarn build-only",
-    "prepublishOnly": "yarn build"
-  },
-  "engines": {
-    "node": ">= 10.0.0"
+    "build": "rimraf dist && microbundle",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/xnimorz/rxdux-state-manager.git"
-  },
-  "keywords": [
-    "debounce",
-    "react-hook",
-    "react"
-  ],
-  "author": "Nikita Mostovoy (nik.mostovoy@gmail.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xnimorz/rxdux-state-manager/issues"
+    "url": "git+https://github.com/mweststrate/rxdux-state-manager.git"
   },
   "files": [
-    "dist"
+    "dist/"
   ],
+  "keywords": [
+    "immer",
+    "react",
+    "hooks"
+  ],
+  "author": "Dhruva Verma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mweststrate/rxdux-state-manager/issues"
+  },
+  "homepage": "https://github.com/mweststrate/rxdux-state-manager#readme",
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "immer": ">=2.0.0",
+    "react": "^16.8.0 || ^17.0.1 || ^18.0.0",
+    "rxjs": ">=7.8.0"
   },
-  "homepage": "https://github.com/xnimorz/rxdux-state-manager#readme",
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.6.2",
-    "@types/enzyme": "^3.9.3",
-    "@types/enzyme-adapter-react-16": "^1.0.5",
-    "@types/jest": "^26.0.10",
-    "@types/node": "^12.0.4",
-    "@types/react": "^16.8.19",
-    "@types/react-dom": "^16.8.4",
-    "@typescript-eslint/eslint-plugin": "^1.9.0",
-    "@typescript-eslint/parser": "^1.9.0",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.13.2",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^9.0.1",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-react-hooks": "^1.6.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^26.4.2",
-    "microbundle": "^0.15.0",
-    "prettier": "^1.17.1",
-    "react": "16.8.3",
-    "react-dom": "16.8.3",
-    "size-limit": "^8.1.0",
-    "ts-jest": "^26.3.0",
-    "typescript": "^3.5.1"
-  },
-  "resolutions": {
-    "kind-of": "6.0.3"
-  },
-  "size-limit": [
-    {
-      "path": "dist/index.js",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.modern.js",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.module.js",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.umd.js",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.js",
-      "import": "{ useDebounce }",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.js",
-      "import": "{ useDebouncedCallback }",
-      "limit": "1 KB"
-    },
-    {
-      "path": "dist/index.js",
-      "import": "{ useThrottledCallback }",
-      "limit": "1 KB"
-    }
-  ],
-  "dependencies": {
-    "rxjs": "^7.8.0"
+    "@types/react": "^16.9.56",
+    "immer": "^9.0.0",
+    "microbundle": "^0.15.1",
+    "rimraf": "^4.1.2",
+    "rxjs": "^7.8.0",
+    "typescript": "^4.9.5"
   }
 }

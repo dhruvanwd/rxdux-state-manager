@@ -1,360 +1,125 @@
-<div align="center">
-  <a href="https://www.npmjs.com/package/use-debounce">
-    <img src="logo.png" width="500" alt="use-debounce" />
-  </a>
-</div>
+# use-immer
 
-<div align="center">
-  <a href="https://www.npmjs.com/package/use-debounce">
-    <img alt="npm" src="https://img.shields.io/npm/v/use-debounce.svg?labelColor=49516F&color=8994BC" />
-  </a>
-  <a href="https://npmjs.org/package/use-debounce">
-    <img alt="downloads" src="https://badgen.net/npm/dm/use-debounce?labelColor=49516F&color=8994BC" />
-  </a>
-  <a href="https://bundlephobia.com/result?p=use-debounce">
-    <img alt="tree-shakeable" src="https://badgen.net/bundlephobia/tree-shaking/use-debounce?labelColor=49516F&color=8994BC" />
-  </a>
-  <a href="https://npmjs.org/package/use-debounce">
-    <img alt="types included" src="https://badgen.net/npm/types/use-debounce?labelColor=49516F&color=8994BC" />
-  </a>
-</div>
+A hook to use [immer](https://github.com/mweststrate/immer) as a React [hook](https://reactjs.org/docs/hooks-intro.html) to manipulate state.
 
-## Features
+# Installation
 
-- [classic debounced callback](#debounced-callbacks)
-- [**value** debouncing](#simple-values-debouncing)
-- [cancel, maxWait and memoization](#advanced-usage)
+`npm install immer use-immer`
 
-## Install
+# API
 
-```sh
-yarn add use-debounce
-# or
-npm i use-debounce --save
-```
+## useImmer
 
-## Copy paste guidance:
+`useImmer(initialState)` is very similar to [`useState`](https://reactjs.org/docs/hooks-state.html).
+The function returns a tuple, the first value of the tuple is the current state, the second is the updater function,
+which accepts an [immer producer function](https://immerjs.github.io/immer/produce) or a value as argument.  
 
-### use-debounce
+### Managing state with immer producer function
 
-Simple usage: https://codesandbox.io/s/kx75xzyrq7
+When passing a function to the updater, the `draft` argument can be mutated freely, until the producer ends and the changes will be made immutable and become the next state.
 
-Debounce HTTP request: https://codesandbox.io/s/rr40wnropq
-
-Debounce HTTP request with `leading` param: https://codesandbox.io/s/cache-example-with-areas-and-leading-param-119r3i
-
-### use-debounce callback
-
-Simple usage: https://codesandbox.io/s/x0jvqrwyq
-
-Combining with native event listeners: https://codesandbox.io/s/32yqlyo815 
-
-Cancelling, maxWait and memoization: https://codesandbox.io/s/4wvmp1xlw4 
-
-HTTP requests: https://codesandbox.io/s/use-debounce-callback-http-y1h3m6
-
-## Changelog
-
-https://github.com/xnimorz/use-debounce/blob/master/CHANGELOG.md
-
-## Simple values debouncing
-
-According to https://twitter.com/dan_abramov/status/1060729512227467264
+Example: https://codesandbox.io/s/l97yrzw8ol
 
 ```javascript
-import React, { useState } from 'react';
-import { useDebounce } from 'use-debounce';
+import React from "react";
+import { useImmer } from "use-immer";
 
-export default function Input() {
-  const [text, setText] = useState('Hello');
-  const [value] = useDebounce(text, 1000);
 
-  return (
-    <div>
-      <input
-        defaultValue={'Hello'}
-        onChange={(e) => {
-          setText(e.target.value);
-        }}
-      />
-      <p>Actual value: {text}</p>
-      <p>Debounce value: {value}</p>
-    </div>
-  );
-}
-```
-
-This hook compares prev and next value using shallow equal. It means, setting an object `{}` will trigger debounce timer. If you have to compare objects (https://github.com/xnimorz/use-debounce/issues/27#issuecomment-496828063), you can use `useDebouncedCallback`, that is explained below:
-
-## Debounced callbacks
-
-Besides `useDebounce` for values you can debounce callbacks, that is the more commonly understood kind of debouncing.
-Example with Input (and react callbacks): https://codesandbox.io/s/x0jvqrwyq
-
-```js
-import { useDebouncedCallback } from 'use-debounce';
-
-function Input({ defaultValue }) {
-  const [value, setValue] = useState(defaultValue);
-  // Debounce callback
-  const debounced = useDebouncedCallback(
-    // function
-    (value) => {
-      setValue(value);
-    },
-    // delay in ms
-    1000
-  );
-
-  // you should use `e => debounced(e.target.value)` as react works with synthetic events
-  return (
-    <div>
-      <input defaultValue={defaultValue} onChange={(e) => debounced(e.target.value)} />
-      <p>Debounced value: {value}</p>
-    </div>
-  );
-}
-```
-
-Example with Scroll (and native event listeners): https://codesandbox.io/s/32yqlyo815
-
-```js
-function ScrolledComponent() {
-  // just a counter to show, that there are no any unnessesary updates
-  const updatedCount = useRef(0);
-  updatedCount.current++;
-
-  const [position, setPosition] = useState(window.pageYOffset);
-
-  // Debounce callback
-  const debounced = useDebouncedCallback(
-    // function
-    () => {
-      setPosition(window.pageYOffset);
-    },
-    // delay in ms
-    800
-  );
-
-  useEffect(() => {
-    const unsubscribe = subscribe(window, 'scroll', debounced);
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  return (
-    <div style={{ height: 10000 }}>
-      <div style={{ position: 'fixed', top: 0, left: 0 }}>
-        <p>Debounced top position: {position}</p>
-        <p>Component rerendered {updatedCount.current} times</p>
-      </div>
-    </div>
-  );
-}
-```
-
-### Returned value from `debounced()`
-
-Subsequent calls to the debounced function `debounced` return the result of the last func invocation.
-Note, that if there are no previous invocations it's mean you will get undefined. You should check it in your code properly.
-
-Example:
-
-```javascript
-it('Subsequent calls to the debounced function `debounced` return the result of the last func invocation.', () => {
-  const callback = jest.fn(() => 42);
-
-  let callbackCache;
-  function Component() {
-    const debounced = useDebouncedCallback(callback, 1000);
-    callbackCache = debounced;
-    return null;
-  }
-  Enzyme.mount(<Component />);
-
-  const result = callbackCache();
-  expect(callback.mock.calls.length).toBe(0);
-  expect(result).toBeUndefined();
-
-  act(() => {
-    jest.runAllTimers();
+function App() {
+  const [person, updatePerson] = useImmer({
+    name: "Michel",
+    age: 33
   });
-  expect(callback.mock.calls.length).toBe(1);
-  const subsequentResult = callbackCache();
 
-  expect(callback.mock.calls.length).toBe(1);
-  expect(subsequentResult).toBe(42);
-});
-```
+  function updateName(name) {
+    updatePerson(draft => {
+      draft.name = name;
+    });
+  }
 
-### Advanced usage
+  function becomeOlder() {
+    updatePerson(draft => {
+      draft.age++;
+    });
+  }
 
-#### Cancel, maxWait and memoization
-
-1. Both `useDebounce` and `useDebouncedCallback` works with `maxWait` option. This params describes the maximum time func is allowed to be delayed before it's invoked.
-2. You can cancel debounce cycle, by calling `cancel` callback
-
-The full example you can see here https://codesandbox.io/s/4wvmp1xlw4
-
-```javascript
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import { useDebouncedCallback } from 'use-debounce';
-
-function Input({ defaultValue }) {
-  const [value, setValue] = useState(defaultValue);
-  const debounced = useDebouncedCallback(
-    (value) => {
-      setValue(value);
-    },
-    500,
-    // The maximum time func is allowed to be delayed before it's invoked:
-    { maxWait: 2000 }
-  );
-
-  // you should use `e => debounced(e.target.value)` as react works with synthetic events
   return (
-    <div>
-      <input defaultValue={defaultValue} onChange={(e) => debounced(e.target.value)} />
-      <p>Debounced value: {value}</p>
-      <button onClick={debounced.cancel}>Cancel Debounce cycle</button>
-    </div>
-  );
-}
-
-const rootElement = document.getElementById('root');
-ReactDOM.render(<Input defaultValue="Hello world" />, rootElement);
-```
-
-#### Flush method
-
-`useDebouncedCallback` has `flush` method. It allows to call the callback manually if it hasn't fired yet. This method is handy to use when the user takes an action that would cause the component to unmount, but you need to execute the callback.
-
-```javascript
-import React, { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-
-function InputWhichFetchesSomeData({ defaultValue, asyncFetchData }) {
-  const debounced = useDebouncedCallback(
-    (value) => {
-      asyncFetchData;
-    },
-    500,
-    { maxWait: 2000 }
-  );
-
-  // When the component goes to be unmounted, we will fetch data if the input has changed.
-  useEffect(
-    () => () => {
-      debounced.flush();
-    },
-    [debounced]
-  );
-
-  return <input defaultValue={defaultValue} onChange={(e) => debounced(e.target.value)} />;
-}
-```
-
-#### isPending method
-
-`isPending` method shows whether component has pending callbacks. Works for both `useDebounce` and `useDebouncedCallback`:
-
-```javascript
-import React, { useCallback } from 'react';
-
-function Component({ text }) {
-  const debounced = useDebouncedCallback(useCallback(() => {}, []), 500);
-
-  expect(debounced.isPending()).toBeFalsy();
-  debounced();
-  expect(debounced.isPending()).toBeTruthy();
-  debounced.flush();
-  expect(debounced.isPending()).toBeFalsy();
-
-  return <span>{text}</span>;
-}
-```
-
-#### leading/trailing calls
-
-Both `useDebounce` and `useDebouncedCallback` work with the `leading` and `trailing` options. `leading` param will execute the function once immediately when called. Subsequent calls will be debounced until the timeout expires. `trailing` option controls whenever to call the callback after timeout again.
-
-For more information on how leading debounce calls work see: https://lodash.com/docs/#debounce
-
-```javascript
-import React, { useState } from 'react';
-import { useDebounce } from 'use-debounce';
-
-export default function Input() {
-  const [text, setText] = useState('Hello');
-  const [value] = useDebounce(text, 1000, { leading: true });
-
-  // value is updated immediately when text changes the first time,
-  // but all subsequent changes are debounced.
-  return (
-    <div>
+    <div className="App">
+      <h1>
+        Hello {person.name} ({person.age})
+      </h1>
       <input
-        defaultValue={'Hello'}
-        onChange={(e) => {
-          setText(e.target.value);
+        onChange={e => {
+          updateName(e.target.value);
         }}
+        value={person.name}
       />
-      <p>Actual value: {text}</p>
-      <p>Debounce value: {value}</p>
+      <br />
+      <button onClick={becomeOlder}>Older</button>
     </div>
   );
 }
 ```
 
-#### Options:
+(obviously, immer is a little overkill for this example)
 
-You can provide additional options as a third argument to both `useDebounce` and `useDebouncedCallback`:
+### Managing state as simple useState hook
+When passing a value to the updater instead of a function, `useImmer` hook behaves the same as useState hook and updates the state with that value.
 
-| option     | default                       | Description                                                                                                                      | Example                                                                |
-| ---------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| maxWait    | -                             | Describes the maximum time func is allowed to be delayed before it's invoked                                                     | https://github.com/xnimorz/use-debounce#cancel-maxwait-and-memoization |
-| leading    | -                             | This param will execute the function once immediately when called. Subsequent calls will be debounced until the timeout expires. | https://github.com/xnimorz/use-debounce#leading-calls                  |
-| trailing   | true                          | This param executes the function after timeout.                                                                                  | https://github.com/xnimorz/use-debounce#leading-calls                  |
-| equalityFn | (prev, next) => prev === next | [useDebounce ONLY] Comparator function which shows if timeout should be started                                                                     |                                                                        |
+```javascript
+import React from 'react';
+import { useImmer } from 'use-immer';
 
-## useThrottledCallback
+function BirthDayCelebrator(){
+  const [age, setAge] = useImmer(20);
 
-You are able to use throttled callback with this library also (starting 5.2.0 version).
-For this purpose use:
+  function birthDay(event){
+    setAge(age + 1);
+    alert(`Happy birthday #${age} Anon! hope you good`);
+  }
 
+  return(
+    <div>
+      <button onClick={birthDay}>It is my birthday</button>
+    </div>
+  );
+}
 ```
-import useThrottledCallback from 'use-debounce/useThrottledCallback';
+
+Obviously if you have to deal with immutability it is better option passing a function to the updater instead of a direct value.
+
+## useImmerReducer
+
+Immer powered reducer, based on [`useReducer` hook](https://reactjs.org/docs/hooks-reference.html#usereducer)
+
+Example: https://codesandbox.io/s/2zor1monvp
+
+```javascript
+import React from "react";
+import { useImmerReducer } from "use-immer";
+
+const initialState = { count: 0 };
+
+function reducer(draft, action) {
+  switch (action.type) {
+    case "reset":
+      return initialState;
+    case "increment":
+      return void draft.count++;
+    case "decrement":
+      return void draft.count--;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+    </>
+  );
+}
 ```
-
-or
-
-```
-import { useThrottledCallback } from 'use-debounce';
-```
-
-Several examples:
-
-1. Avoid excessively updating the position while scrolling.
-
-   ```js
-   const scrollHandler = useThrottledCallback(updatePosition, 100);
-   window.addEventListener('scroll', scrollHandler);
-   ```
-
-2. Invoke `renewToken` when the click event is fired, but not more than once every 5 minutes.
-   ```js
-   const throttled = useThrottledCallback(renewToken, 300000, { 'trailing': false })
-   <button onClick={throttled}>click</button>
-   ```
-
-All the params for `useThrottledCallback` are the same as for `useDebouncedCallback` except `maxWait` option. As it's not needed for throttle callbacks.
-
-# Special thanks:
-
-[@tryggvigy](https://github.com/tryggvigy) — for managing lots of new features of the library like trailing and leading params, throttle callback, etc;
-
-[@omgovich](https://github.com/omgovich) — for reducing bundle size.
-#   r x d u x - s t a t e - m a n a g e r  
- #   r x d u x - s t a t e - m a n a g e r  
- 
