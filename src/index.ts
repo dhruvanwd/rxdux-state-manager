@@ -1,12 +1,12 @@
-import { BehaviorSubject } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
-import React from "react";
+import { BehaviorSubject, distinctUntilChanged } from "rxjs";
+import * as React from "react";
+import produce from "immer";
 
 export function easyStateManager<T>(initalValue: T) {
   const $state = new BehaviorSubject<T>(initalValue);
 
-  function useStateManager(...keys: (keyof T)[]): T {
-    const [state, setState] = React.useState<T>($state.value);
+  const useStateManager = (...keys: Array<keyof T>): T => {
+    const [state, setState] = React.useState($state.value);
     React.useEffect(() => {
       const subscription = $state
         .pipe(
@@ -25,19 +25,19 @@ export function easyStateManager<T>(initalValue: T) {
           next: setState,
         });
       return () => subscription.unsubscribe();
-    }, [keys]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keys?.join("")]);
     return state as T;
-  }
+  };
 
   const updateState = (cb: (draft: T) => any) => {
-    const cloned = { ...$state.value };
-    const updatedClone = cb(cloned);
-    $state.next(updatedClone || cloned);
+    const updatedClone = produce($state.value, cb);
+    $state.next(updatedClone);
   };
 
   return {
-    $state,
     useStateManager,
     updateState,
+    $state,
   };
 }

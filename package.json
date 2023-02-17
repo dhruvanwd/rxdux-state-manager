@@ -1,7 +1,7 @@
 {
   "name": "rxdux-state-manager",
-  "version": "0.0.0",
-  "description": "Use immer with React hooks",
+  "version": "0.0.1",
+  "description": "rxdux-state-manager",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
   "module": "dist/rxdux-state-manager.module.js",
