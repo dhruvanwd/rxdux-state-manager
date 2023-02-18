@@ -1,6 +1,6 @@
 {
   "name": "rxdux-state-manager",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "description": "rxdux-state-manager",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
@@ -29,9 +29,12 @@
     "dist/"
   ],
   "keywords": [
-    "immer",
     "react",
-    "hooks"
+    "hooks",
+    "state manager",
+    "state management",
+    "redux",
+    "rxdux"
   ],
   "author": "Dhruva Verma",
   "license": "MIT",

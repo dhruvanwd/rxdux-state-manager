@@ -1,5 +1,5 @@
 import { BehaviorSubject, distinctUntilChanged } from "rxjs";
-import * as React from "react";
+import React from "react";
 import produce from "immer";
 
 export function easyStateManager<T>(initalValue: T) {
@@ -12,11 +12,10 @@ export function easyStateManager<T>(initalValue: T) {
         .pipe(
           distinctUntilChanged((prev, next) => {
             if (keys) {
-              for (const key of keys) {
-                if (prev[key] === next[key]) {
-                  return true;
-                }
-              }
+              const comparedKeys = keys.filter(
+                (key) => prev[key] !== next[key]
+              );
+              return comparedKeys.length === 0;
             }
             return false;
           })

@@ -1,27 +1,21 @@
 # rxdux-state-manager
 
-A state management library developed using rxjs. it can as a React hook to manipulate state.
-Inspired by redux
+A state management library developed using rxjs. Inspired by flux artitechture
 
 # Installation
 
 `npm install rxdux-state-manager`
+**_OR_**
+`yarn add rxdux-state-manager`
 
-# API
-
-## rxdux-state-manager
-
-A state management library developed using rxjs. it can as a React hook to manipulate state.
-Inspired by redux 
+> it can be used as a React hook to consume state.
 
 ### Initializing state manager with rxdux-state-manager
 
-dummyActions : When passing a function to the updater, the `draft` argument can be mutated freely, until the producer ends and the changes will be made immutable and become the next state.
-
-# initalize state rxduxStore.ts
+### rxduxStore.ts
 
 ```javascript
-import { EasyStateManager } from 'rxdux-state-manager';
+import { easyStateManager } from "rxdux-state-manager";
 
 export const {
   useStateManager: useGlobalState,
@@ -47,18 +41,20 @@ export const dummyActions = {
     });
   },
 };
-
 ```
+
+_dummyActions_ : When passing a function to the updater, the `draft` argument can be mutated freely, until the producer ends and the changes will be made immutable and become the next state.
+
 ### Using hook to get state
 
-# here is Counter.tsx
+### Here is Counter.tsx
 
 ```javascript
-import React from 'react';
-import { dummyActions, useGlobalState } from './rxduxStore';
+import React from "react";
+import { dummyActions, useGlobalState } from "./rxduxStore";
 
 export default function Counter() {
-  const { count } = useGlobalState('count');
+  const { count } = useGlobalState("count");
   return (
     <div className="p-2 rounded border border-blue-500">
       <p className="text-purple-600">{count}</p>
@@ -69,6 +65,11 @@ export default function Counter() {
   );
 }
 ```
-# **$globalState** is rxjs *BehaviorSubject*. you can access *current state* by $globalState.value
 
-# did you notice **onClick={dummyActions.incr}** ? that's all you need to update state from anywhere. no dispatch needed
+###### 1. const { count } = useGlobalState('count') . why does useGlobalState take "count" ?
+
+Because "count" tells useGlobalState to rerender component only of count key in state changes.
+
+###### 2. did you notice **onClick={dummyActions.incr}** ? that's all you need to update state from anywhere. no dispatch needed.
+
+###### 3. $globalState is rxjs _BehaviorSubject_. you can access _current state_ by $globalState.value
