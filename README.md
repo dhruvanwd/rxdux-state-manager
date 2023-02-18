@@ -66,10 +66,26 @@ export default function Counter() {
 }
 ```
 
-###### 1. const { count } = useGlobalState('count') . why does useGlobalState take "count" ?
+###### 1. have you noticed ? *const { count } = useGlobalState('count') && *onClick={dummyActions.incr}* ?
 
+ why does useGlobalState take "count" argument  ?
 Because "count" tells useGlobalState to rerender component only of count key in state changes.
 
-###### 2. did you notice **onClick={dummyActions.incr}** ? that's all you need to update state from anywhere. no dispatch needed.
+ **onClick={dummyActions.incr}** ? is all you need to update state from anywhere. no dispatch needed.
 
-###### 3. $globalState is rxjs _BehaviorSubject_. you can access _current state_ by $globalState.value
+###### 2. $globalState is rxjs _BehaviorSubject_. you can access _current state_ by $globalState.value anywhere inside app.
+``` 
+const state =  $globalState.value; 
+console.log(state.person.age)
+```
+
+
+NOTE: useGlobalState can take multiple arguments. 
+
+```
+ const { count, person } = useGlobalState("count", "person");
+ console.log({
+	 count, 
+	 person
+ })
+```

@@ -1,6 +1,6 @@
 {
   "name": "rxdux-state-manager",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "rxdux-state-manager",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mweststrate/rxdux-state-manager.git"
+    "url": "git+https://github.com/webdevelopementcenter/rxdux-state-manager.git"
   },
   "files": [
     "dist/"
@@ -39,9 +39,9 @@
   "author": "Dhruva Verma",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mweststrate/rxdux-state-manager/issues"
+    "url": "https://github.com/webdevelopementcenter/rxdux-state-manager.git/issues"
   },
-  "homepage": "https://github.com/mweststrate/rxdux-state-manager#readme",
+  "homepage": "https://github.com/webdevelopementcenter/rxdux-state-manager.git#readme",
   "peerDependencies": {
     "immer": ">=2.0.0",
     "react": "^16.8.0 || ^17.0.1 || ^18.0.0",
