@@ -1,6 +1,6 @@
 import { BehaviorSubject, distinctUntilChanged } from "rxjs";
 import React from "react";
-import produce from "immer";
+import { produce } from "immer";
 
 export function easyStateManager<T>(initalValue: T) {
   const $state = new BehaviorSubject<T>(initalValue);
@@ -17,15 +17,14 @@ export function easyStateManager<T>(initalValue: T) {
               );
               return comparedKeys.length === 0;
             }
-            return false;
+            return true;
           })
         )
         .subscribe({
           next: setState,
         });
       return () => subscription.unsubscribe();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keys?.join("")]);
+    }, [keys.length]);
     return state as T;
   };
 
