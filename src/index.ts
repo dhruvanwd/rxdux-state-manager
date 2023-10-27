@@ -18,7 +18,7 @@ export function easyStateManager<T>(initalValue: T) {
               );
               return comparedKeys.length === 0;
             }
-            return true;
+            return false;
           })
         )
         .subscribe({

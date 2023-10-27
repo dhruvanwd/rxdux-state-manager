@@ -1,6 +1,6 @@
 {
   "name": "rxdux-state-manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "rxdux-state-manager",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
