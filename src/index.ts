@@ -1,4 +1,5 @@
-import { BehaviorSubject, distinctUntilChanged } from "rxjs";
+import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { distinctUntilChanged } from "rxjs/internal/operators/distinctUntilChanged";
 import React from "react";
 import { produce } from "immer";
 
@@ -11,7 +12,7 @@ export function easyStateManager<T>(initalValue: T) {
       const subscription = $state
         .pipe(
           distinctUntilChanged((prev, next) => {
-            if (keys) {
+            if (keys?.length) {
               const comparedKeys = keys.filter(
                 (key) => prev[key] !== next[key]
               );
