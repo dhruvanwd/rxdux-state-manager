@@ -1,18 +1,30 @@
 # rxdux-state-manager
 
-A state management library developed using rxjs. Inspired by flux artitechture
+A powerful and flexible state management library developed using RxJS, inspired by the Flux architecture. Ideal for managing complex state in React applications.
 
-# Installation
+## Installation
 
-`npm install rxdux-state-manager`
-**_OR_**
-`yarn add rxdux-state-manager`
+Easily integrate `rxdux-state-manager` into your project:
 
-> it can be used as a React hook to consume state.
+```sh
+npm install rxdux-state-manager
+```
 
-### Initializing state manager with rxdux-state-manager
+or
 
-### rxduxStore.ts
+```sh
+yarn add rxdux-state-manager
+```
+
+> **Tip:** This library can be used as a React hook for efficient state management.
+
+## Getting Started with rxdux-state-manager
+
+### Initializing the State Manager
+
+Initialize the state manager to manage your application's state effectively.
+
+#### counter-state-manager.ts
 
 ```javascript
 import { easyStateManager } from "rxdux-state-manager";
@@ -24,41 +36,47 @@ export const {
 } = easyStateManager({
   count: 0,
   person: {
-    name: "john doe",
+    name: "John Doe",
     age: 22,
   },
 });
 
-export const dummyActions = {
-  incr: () => {
+class CounterActions {
+  incr = () => {
     updateGlobalState((draft) => {
-      draft.count = ++draft.count;
+      draft.count++;
     });
-  },
-  incrAge: () => {
+  };
+
+  incrAge = () => {
     updateGlobalState((draft) => {
       draft.person.age++;
     });
-  },
-};
+  };
+}
+
+export const counterActions = new CounterActions();
 ```
 
-_dummyActions_ : When passing a function to the updater, the `draft` argument can be mutated freely, until the producer ends and the changes will be made immutable and become the next state.
+**Key Feature:** When passing a function to the updater, the `draft` argument can be mutated freely. Changes will be made immutable and become the next state once the producer ends.
 
-### Using hook to get state
+### Using the Hook to Access and Update State
 
-### Here is Counter.tsx
+Learn how to use the hook to consume and update state in your React components.
+
+#### Counter.tsx
 
 ```javascript
 import React from "react";
-import { dummyActions, useGlobalState } from "./rxduxStore";
+import { counterActions, useGlobalState } from "./counter-state-manager";
 
 export default function Counter() {
   const { count } = useGlobalState("count");
+  
   return (
     <div className="p-2 rounded border border-blue-500">
       <p className="text-purple-600">{count}</p>
-      <button className="border p-1 rounded" onClick={dummyActions.incr}>
+      <button className="border p-1 rounded" onClick={counterActions.incr}>
         Increment
       </button>
     </div>
@@ -66,26 +84,38 @@ export default function Counter() {
 }
 ```
 
-###### 1. have you noticed ? *const { count } = useGlobalState('count') && *onClick={dummyActions.incr}* ?
+### Why Use rxdux-state-manager?
 
- why does useGlobalState take "count" argument  ?
-Because "count" tells useGlobalState to rerender component only of count key in state changes.
+1. **Selective Rerendering:** Use `const { count } = useGlobalState('count')` to rerender components only when specific state keys change, improving performance.
+2. **Effortless State Updates:** Simplify state updates with `onClick={counterActions.incr}` without the need for dispatchers.
 
- **onClick={dummyActions.incr}** ? is all you need to update state from anywhere. no dispatch needed.
+### Accessing Current State with RxJS BehaviorSubject
 
-###### 2. $globalState is rxjs _BehaviorSubject_. you can access _current state_ by $globalState.value anywhere inside app.
-``` 
-const state =  $globalState.value; 
-console.log(state.person.age)
+`$globalState` is an RxJS `BehaviorSubject`, allowing you to access the current state anywhere in your application:
+
+```javascript
+const state = $globalState.value; 
+console.log(state.person.age);
 ```
 
+### Using Multiple State Keys with useGlobalState
 
-NOTE: useGlobalState can take multiple arguments. 
+The `useGlobalState` hook can take multiple arguments for accessing various state keys:
 
+```javascript
+const { count, person } = useGlobalState("count", "person");
+console.log({
+  count,
+  person,
+});
 ```
- const { count, person } = useGlobalState("count", "person");
- console.log({
-	 count, 
-	 person
- })
-```
+
+## Advantages of Using rxdux-state-manager
+
+- **Efficient State Management:** Manage your application’s state efficiently with RxJS and React.
+- **Scalable and Maintainable:** Ideal for complex applications requiring a scalable and maintainable state management solution.
+- **Improved Performance:** Optimize performance with selective rerendering and immutable state updates.
+
+## License
+
+This project is licensed under the MIT License.
