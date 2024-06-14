@@ -1,7 +1,7 @@
 {
   "name": "rxdux-state-manager",
-  "version": "1.0.4",
-  "description": "rxdux-state-manager",
+  "version": "1.0.5",
+  "description": "A library for managing state in react applications",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
   "module": "dist/rxdux-state-manager.module.js",
@@ -34,7 +34,8 @@
     "state manager",
     "state management",
     "redux",
-    "rxdux"
+    "rxdux",
+    "react state manager"
   ],
   "author": "Dhruva Verma",
   "license": "MIT",
@@ -44,10 +45,10 @@
   "homepage": "https://github.com/webdevelopementcenter/rxdux-state-manager.git#readme",
   "peerDependencies": {
     "immer": ">=2.0.0",
-    "react": "^16.8.0 || ^17.0.1 || ^18.0.0"
+    "react": "^16.8.0 || ^17.0.1 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^16.9.56",
+    "@types/react": "^18.3.3",
     "immer": "^10.0.3",
     "microbundle": "^0.15.1",
     "rimraf": "^4.1.2",
