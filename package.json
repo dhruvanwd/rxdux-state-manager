@@ -1,6 +1,6 @@
 {
   "name": "rxdux-state-manager",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A library for managing state in react applications",
   "main": "dist/rxdux-state-manager.js",
   "umd:main": "dist/rxdux-state-manager.umd.js",
